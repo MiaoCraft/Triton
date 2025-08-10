@@ -30,4 +30,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Triton-API
-          path: core/build/libs
+          path: api/build/libs
