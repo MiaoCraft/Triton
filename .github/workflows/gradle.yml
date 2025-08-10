@@ -21,6 +21,9 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build --full-stacktrace
+
+      - name: Check Folder
+        run: ls
         
       - uses: actions/upload-artifact@v4
         with:
