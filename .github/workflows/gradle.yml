@@ -24,5 +24,10 @@ jobs:
         
       - uses: actions/upload-artifact@v4
         with:
-          name: Triton
-          path: core
+          name: Triton-Core
+          path: core/build/libs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Triton-API
+          path: core/build/libs
