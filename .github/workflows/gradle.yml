@@ -1,6 +1,6 @@
 name: Java CI
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -19,25 +19,31 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      # 关键修改：使用 shadowJar 任务而非 build
       - name: Build with Gradle
-        run: ./gradlew build --full-stacktrace
+        run: ./gradlew shadowJar --full-stacktrace
 
-      - name: Check Folder
-        run: ls
-      # 上传完整工作目录（包含所有生成文件）
-      - name: Upload Entire Workspace
+      # 添加调试步骤，列出所有 JAR 文件
+      - name: List generated JAR files
+        run: find . -name "*.jar"
+
+      # 上传 Shadow JAR（主构建产物）
+      - name: Upload Triton Shadow JAR
         uses: actions/upload-artifact@v4
         with:
-          name: full-environment
-          path: ${{ github.workspace }}
-          retention-days: 7  # 自动保留天数（可选）
-        
-      - uses: actions/upload-artifact@v4
+          name: Triton-Shadow
+          path: build/libs/Triton-*.jar
+          retention-days: 7
+
+      # 上传其他模块（可选）
+      - name: Upload Core Module
+        uses: actions/upload-artifact@v4
         with:
           name: Triton-Core
-          path: core/build/libs
+          path: core/build/libs/*.jar
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload API Module
+        uses: actions/upload-artifact@v4
         with:
           name: Triton-API
-          path: api/build/libs
+          path: api/build/libs/*.jar
